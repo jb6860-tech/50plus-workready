@@ -3,7 +3,7 @@
  * gold accent, 6 quick-access cards with staggered fade-up animation
  */
 import { useLocation } from "wouter";
-import { FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Star } from "lucide-react";
+import { FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Star, Heart } from "lucide-react";
 import PageFooter from "@/components/PageFooter";
 
 const HERO_IMAGE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372772610/7aCQhXVwYTmP85sKfYqKej/hero-banner-DWYyjSeupqiTNoNsnQcrDH.webp";
@@ -40,9 +40,16 @@ const sections = [
   {
     path: "/job-resources",
     icon: Briefcase,
-    title: "Job Resources",
+    title: "Age-Friendly Job Resources",
     desc: "Age-friendly job boards and organizations",
     color: "#2A5298",
+  },
+  {
+    path: "/affirmations",
+    icon: Heart,
+    title: "Daily Affirmations",
+    desc: "Words of strength for your job search journey",
+    color: "#C9922A",
   },
 ];
 

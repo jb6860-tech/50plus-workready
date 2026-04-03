@@ -10,6 +10,7 @@ import InterviewScripts from "./pages/InterviewScripts";
 import CoverLetterBuilder from "./pages/CoverLetterBuilder";
 import ScamChecker from "./pages/ScamChecker";
 import JobResources from "./pages/JobResources";
+import Affirmations from "./pages/Affirmations";
 
 function Router() {
   return (
@@ -21,6 +22,7 @@ function Router() {
         <Route path="/cover-letter" component={CoverLetterBuilder} />
         <Route path="/scam-checker" component={ScamChecker} />
         <Route path="/job-resources" component={JobResources} />
+        <Route path="/affirmations" component={Affirmations} />
         <Route component={Home} />
       </Switch>
       <BottomNav />

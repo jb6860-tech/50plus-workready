@@ -7,3 +7,4 @@
 - [x] Resume Builder: AI-powered resume analysis and feedback
 - [ ] AI Job Match: paste job description, get match score and keyword suggestions
 - [ ] Cover Letter Builder: AI-powered generation via tRPC LLM
+- [ ] AI Interview Coach: paste job description, get custom questions with age-positive answer frameworks

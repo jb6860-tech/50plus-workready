@@ -440,6 +440,75 @@ Key achievement: ${input.achievement}${input.jobDescription ? `\nJob description
         return { success: true };
       }),
   }),
-});
+  interviewCoach: router({
+    generate: publicProcedure
+      .input(z.object({
+        jobDescription: z.string().min(10).max(8000),
+        resumeText: z.string().max(6000).optional(),
+        experienceLevel: z.enum(["entry", "mid", "senior", "executive"]).default("senior"),
+      }))
+      .mutation(async ({ input }) => {
+        const systemPrompt = `You are an expert career coach specializing in helping adults aged 50+ succeed in job interviews. You understand the unique challenges they face including age discrimination, employment gaps, and the need to present decades of experience concisely. Generate interview questions and answer frameworks that are age-positive, confident, and strategic.`;
 
+        const userPrompt = `Based on the following job description, generate 7 highly relevant interview questions this candidate is likely to face, along with a strategic answer framework for each.
+
+Job Description:
+${input.jobDescription}
+
+${input.resumeText ? `Candidate Background:\n${input.resumeText}\n\n` : ""}Experience Level: ${input.experienceLevel}
+
+For each question provide:
+1. The interview question
+2. Why they ask it (brief, 1 sentence)
+3. A strategic answer framework (3-4 sentences, age-positive, confident, draws on experience as a strength)
+4. A power phrase to use (a memorable closing sentence)
+5. A red flag to avoid (one thing NOT to say)
+
+Also provide:
+- An overall preparation tip specific to this role
+- One age-positive reframe for this job search
+
+Respond in valid JSON with this structure:
+{
+  "questions": [
+    {
+      "question": "string",
+      "whyAsked": "string",
+      "framework": "string",
+      "powerPhrase": "string",
+      "redFlag": "string"
+    }
+  ],
+  "prepTip": "string",
+  "ageReframe": "string"
+}`;
+
+        const response = await invokeLLM({
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt },
+          ],
+          response_format: { type: "json_object" },
+        });
+
+        const content = response.choices[0]?.message?.content as string;
+        try {
+          const parsed = JSON.parse(content);
+          return parsed as {
+            questions: Array<{
+              question: string;
+              whyAsked: string;
+              framework: string;
+              powerPhrase: string;
+              redFlag: string;
+            }>;
+            prepTip: string;
+            ageReframe: string;
+          };
+        } catch {
+          throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to parse AI response" });
+        }
+      }),
+  }),
+});
 export type AppRouter = typeof appRouter;

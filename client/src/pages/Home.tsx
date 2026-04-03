@@ -6,7 +6,7 @@ import { useState, useCallback } from "react";
 import { useLocation } from "wouter";
 import {
   FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Star, Heart,
-  ClipboardList, Sun, X, ArrowRight, DollarSign, Share2, Users, Crown, Linkedin, Gift, User, Network, Shield, FilePen, Target
+  ClipboardList, Sun, X, ArrowRight, DollarSign, Share2, Users, Crown, Linkedin, Gift, User, Network, Shield, FilePen, Target, GraduationCap
 } from "lucide-react";
 import PageFooter from "@/components/PageFooter";
 import { toast } from "sonner";
@@ -88,6 +88,7 @@ const sections = [
   { path: "/admin", icon: Shield, title: "Admin Dashboard", desc: "Business overview, user stats, and content moderation", color: "#1B3A6B" },
   { path: "/resume-builder", icon: FilePen, title: "Resume Builder", desc: "Build and download a professional, age-bias-free resume as a PDF", color: "#C9922A" },
   { path: "/job-match", icon: Target, title: "AI Job Match", desc: "Paste a job description and get your match score, missing keywords, and tips", color: "#7c3aed" },
+  { path: "/interview-coach", icon: GraduationCap, title: "AI Interview Coach", desc: "Get 7 custom interview questions with age-positive answer frameworks for any job", color: "#059669" },
 ];
 
 export default function Home() {

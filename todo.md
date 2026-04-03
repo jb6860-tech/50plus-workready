@@ -5,7 +5,9 @@
 - [x] Resume Builder: Save & Resume Later (DB persistence, auto-save, load on return)
 - [x] Resume Builder: Multiple templates (Classic, Modern, Compact)
 - [x] Resume Builder: AI-powered resume analysis and feedback
-- [ ] AI Job Match: paste job description, get match score and keyword suggestions
-- [ ] Cover Letter Builder: AI-powered generation via tRPC LLM
-- [ ] AI Interview Coach: paste job description, get custom questions with age-positive answer frameworks
-- [ ] Pricing page: Free/Monthly/Lifetime plan cards with feature comparison and Stripe checkout
+- [x] AI Job Match: paste job description, get match score and keyword suggestions
+- [x] Cover Letter Builder: AI-powered generation via tRPC LLM
+- [x] AI Interview Coach: paste job description, get custom questions with age-positive answer frameworks
+- [x] Pricing page: Free/Monthly/Lifetime plan cards with feature comparison and Stripe checkout
+- [x] Privacy Policy page inside the app with route and navigation link
+- [x] App store presentation script document

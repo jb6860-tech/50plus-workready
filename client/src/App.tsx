@@ -25,6 +25,7 @@ import ResumeBuilder from "./pages/ResumeBuilder";
 import JobMatch from "./pages/JobMatch";
 import InterviewCoach from "./pages/InterviewCoach";
 import Pricing from "./pages/Pricing";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
@@ -51,6 +52,7 @@ function Router() {
         <Route path="/job-match" component={JobMatch} />
         <Route path="/interview-coach" component={InterviewCoach} />
         <Route path="/pricing" component={Pricing} />
+        <Route path="/privacy" component={PrivacyPolicy} />
         <Route component={Home} />
       </Switch>
       <BottomNav />

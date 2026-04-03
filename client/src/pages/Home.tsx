@@ -6,7 +6,7 @@ import { useState, useCallback } from "react";
 import { useLocation } from "wouter";
 import {
   FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Star, Heart,
-  ClipboardList, Sun, X, ArrowRight, DollarSign, Share2, Users, Crown, Linkedin, Gift, User, Network, Shield, FilePen
+  ClipboardList, Sun, X, ArrowRight, DollarSign, Share2, Users, Crown, Linkedin, Gift, User, Network, Shield, FilePen, Target
 } from "lucide-react";
 import PageFooter from "@/components/PageFooter";
 import { toast } from "sonner";
@@ -87,6 +87,7 @@ const sections = [
   { path: "/networking", icon: Network, title: "Networking Hub", desc: "LinkedIn tips and local events to grow your connections", color: "#0077B5" },
   { path: "/admin", icon: Shield, title: "Admin Dashboard", desc: "Business overview, user stats, and content moderation", color: "#1B3A6B" },
   { path: "/resume-builder", icon: FilePen, title: "Resume Builder", desc: "Build and download a professional, age-bias-free resume as a PDF", color: "#C9922A" },
+  { path: "/job-match", icon: Target, title: "AI Job Match", desc: "Paste a job description and get your match score, missing keywords, and tips", color: "#7c3aed" },
 ];
 
 export default function Home() {

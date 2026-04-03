@@ -2,6 +2,8 @@
 - [x] Resume Builder: live formatted preview panel
 - [x] Resume Builder: PDF download via client-side jsPDF generation
 - [x] Resume Builder: route, nav tab, and Home Dashboard card
-- [ ] Resume Builder: Save & Resume Later (DB persistence, auto-save, load on return)
-- [ ] Resume Builder: Multiple templates (Classic, Modern, Compact)
-- [ ] Resume Builder: AI-powered resume analysis and feedback
+- [x] Resume Builder: Save & Resume Later (DB persistence, auto-save, load on return)
+- [x] Resume Builder: Multiple templates (Classic, Modern, Compact)
+- [x] Resume Builder: AI-powered resume analysis and feedback
+- [ ] AI Job Match: paste job description, get match score and keyword suggestions
+- [ ] Cover Letter Builder: AI-powered generation via tRPC LLM

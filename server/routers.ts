@@ -297,6 +297,108 @@ Return your response as JSON matching this exact schema:
         return JSON.parse(content);
       }),
   }),
+  jobMatch: router({
+    analyze: protectedProcedure
+      .input(z.object({
+        resumeText: z.string().min(20).max(8000),
+        jobDescription: z.string().min(20).max(8000),
+      }))
+      .mutation(async ({ input }) => {
+        const response = await invokeLLM({
+          messages: [
+            {
+              role: "system",
+              content: `You are an expert career coach and ATS (Applicant Tracking System) specialist helping adults 50+ optimize their job applications.
+Analyze the provided resume against the job description and return a detailed match analysis.
+Be specific, actionable, and encouraging. Focus on realistic improvements.
+Return your response as JSON matching this exact schema:
+{
+  "matchScore": number (0-100, overall compatibility score),
+  "summary": string (2-3 sentence overview of the match),
+  "matchedKeywords": string[] (keywords from job description found in resume),
+  "missingKeywords": string[] (important keywords from job description NOT in resume),
+  "strengthAreas": string[] (3-4 areas where the candidate is a strong match),
+  "gapAreas": [{"gap": string, "suggestion": string}] (3-5 gaps with specific fix suggestions),
+  "tailoredBullets": string[] (3-4 resume bullet point rewrites using job description language),
+  "coverLetterHook": string (one powerful opening sentence for the cover letter tailored to this job),
+  "interviewPrepTips": string[] (3 likely interview questions based on the job description with brief answer guidance)
+}`,
+            },
+            {
+              role: "user",
+              content: `RESUME:\n${input.resumeText}\n\nJOB DESCRIPTION:\n${input.jobDescription}`,
+            },
+          ],
+          response_format: {
+            type: "json_schema",
+            json_schema: {
+              name: "job_match_analysis",
+              strict: true,
+              schema: {
+                type: "object",
+                properties: {
+                  matchScore: { type: "number" },
+                  summary: { type: "string" },
+                  matchedKeywords: { type: "array", items: { type: "string" } },
+                  missingKeywords: { type: "array", items: { type: "string" } },
+                  strengthAreas: { type: "array", items: { type: "string" } },
+                  gapAreas: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: { gap: { type: "string" }, suggestion: { type: "string" } },
+                      required: ["gap", "suggestion"],
+                      additionalProperties: false,
+                    },
+                  },
+                  tailoredBullets: { type: "array", items: { type: "string" } },
+                  coverLetterHook: { type: "string" },
+                  interviewPrepTips: { type: "array", items: { type: "string" } },
+                },
+                required: ["matchScore", "summary", "matchedKeywords", "missingKeywords", "strengthAreas", "gapAreas", "tailoredBullets", "coverLetterHook", "interviewPrepTips"],
+                additionalProperties: false,
+              },
+            },
+          },
+        });
+        const content = (response.choices[0]?.message?.content as string) || "{}";
+        return JSON.parse(content);
+      }),
+  }),
+  coverLetter: router({
+    generate: publicProcedure
+      .input(z.object({
+        name: z.string().min(1).max(128),
+        jobTitle: z.string().min(1).max(128),
+        company: z.string().min(1).max(128),
+        skills: z.string().min(1).max(500),
+        achievement: z.string().min(1).max(500),
+        tone: z.enum(["professional", "warm", "confident"]).default("professional"),
+        jobDescription: z.string().max(3000).optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const response = await invokeLLM({
+          messages: [
+            {
+              role: "system",
+              content: `You are an expert career coach specializing in helping adults 50+ write compelling cover letters.
+Write a professional, age-positive cover letter that highlights experience as a strength.
+The letter should be warm yet professional, 3-4 paragraphs, and avoid any language that signals age anxiety.
+Do NOT include placeholders like [Date] or [Address]. Start directly with "Dear Hiring Manager,".
+Return ONLY the cover letter text, no additional commentary.`,
+            },
+            {
+              role: "user",
+              content: `Write a ${input.tone} cover letter for ${input.name} applying for the ${input.jobTitle} position at ${input.company}.
+Top skills: ${input.skills}
+Key achievement: ${input.achievement}${input.jobDescription ? `\nJob description context: ${input.jobDescription}` : ""}`,
+            },
+          ],
+        });
+        const letter = (response.choices[0]?.message?.content as string) || "";
+        return { letter };
+      }),
+  }),
   stories: router({
     list: publicProcedure.query(async () => {
       return await getApprovedStories();

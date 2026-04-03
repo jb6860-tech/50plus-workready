@@ -22,6 +22,7 @@ import ReferralProgram from "./pages/ReferralProgram";
 import AdminDashboard from "./pages/AdminDashboard";
 import NetworkingDashboard from "./pages/NetworkingDashboard";
 import ResumeBuilder from "./pages/ResumeBuilder";
+import JobMatch from "./pages/JobMatch";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
@@ -45,6 +46,7 @@ function Router() {
         <Route path="/admin" component={AdminDashboard} />
         <Route path="/networking" component={NetworkingDashboard} />
         <Route path="/resume-builder" component={ResumeBuilder} />
+        <Route path="/job-match" component={JobMatch} />
         <Route component={Home} />
       </Switch>
       <BottomNav />

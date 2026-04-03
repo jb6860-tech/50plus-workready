@@ -8,7 +8,8 @@ import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import {
   hasPremiumAccess, upsertSubscription, updateSubscriptionStatus,
   createPurchase, getUserByStripeCustomerId, updateUserStripeCustomerId,
-  getApprovedStories, createSuccessStory,
+  getApprovedStories, createSuccessStory, getActiveSubscription, getLifetimePurchase,
+  getUserReferralCode, getReferralStats,
 } from "./db";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", { apiVersion: "2025-01-27.acacia" });
@@ -156,6 +157,40 @@ export const appRouter = router({
           },
           success_url: input.origin + "/premium-success?session_id={CHECKOUT_SESSION_ID}",
           cancel_url: input.origin + "/bonus-scripts",
+        });
+        return { url: session.url };
+      }),
+  }),
+  account: router({
+    dashboard: protectedProcedure.query(async ({ ctx }) => {
+      const [isPremium, sub, purchase, referralCode, referralStats] = await Promise.all([
+        hasPremiumAccess(ctx.user.id),
+        getActiveSubscription(ctx.user.id),
+        getLifetimePurchase(ctx.user.id),
+        getUserReferralCode(ctx.user.id),
+        getReferralStats(ctx.user.id),
+      ]);
+      return {
+        user: { name: ctx.user.name, email: ctx.user.email },
+        isPremium,
+        subscription: sub ? {
+          status: sub.status,
+          currentPeriodEnd: sub.currentPeriodEnd,
+          stripeSubscriptionId: sub.stripeSubscriptionId,
+        } : null,
+        hasLifetime: !!purchase,
+        referralCode,
+        referralStats,
+      };
+    }),
+    createPortalSession: protectedProcedure
+      .input(z.object({ origin: z.string() }))
+      .mutation(async ({ ctx, input }) => {
+        const sub = await getActiveSubscription(ctx.user.id);
+        if (!sub?.stripeCustomerId) throw new Error("No active subscription found");
+        const session = await stripe.billingPortal.sessions.create({
+          customer: sub.stripeCustomerId,
+          return_url: input.origin + "/account",
         });
         return { url: session.url };
       }),

@@ -6,7 +6,7 @@ import { useState, useCallback } from "react";
 import { useLocation } from "wouter";
 import {
   FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Star, Heart,
-  ClipboardList, Sun, X, ArrowRight, DollarSign, Share2, Users, Crown
+  ClipboardList, Sun, X, ArrowRight, DollarSign, Share2, Users, Crown, Linkedin, Gift, User
 } from "lucide-react";
 import PageFooter from "@/components/PageFooter";
 import { toast } from "sonner";
@@ -81,6 +81,9 @@ const sections = [
   { path: "/salary-negotiation", icon: DollarSign, title: "Salary Negotiation", desc: "Scripts and strategies to ask for what you deserve", color: "#C9922A" },
   { path: "/success-stories", icon: Users, title: "Success Stories", desc: "Real inspiration from workers 50+ who made it happen", color: "#2A5298" },
   { path: "/bonus-scripts", icon: Crown, title: "Premium: Bonus Scripts", desc: "10 advanced interview scripts for the toughest questions", color: "#C9922A" },
+  { path: "/linkedin-guide", icon: Linkedin, title: "LinkedIn Profile Guide", desc: "Optimize your profile to attract age-friendly employers", color: "#0077B5" },
+  { path: "/referral", icon: Gift, title: "Referral Program", desc: "Share the app and earn rewards for growing our community", color: "#1B3A6B" },
+  { path: "/account", icon: User, title: "My Account", desc: "Manage your subscription, referrals, and premium access", color: "#2A5298" },
 ];
 
 export default function Home() {

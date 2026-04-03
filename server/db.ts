@@ -1,6 +1,6 @@
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, subscriptions, purchases, successStories, InsertSuccessStory } from "../drizzle/schema";
+import { InsertUser, users, subscriptions, purchases, successStories, InsertSuccessStory, referrals } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -132,4 +132,38 @@ export async function createSuccessStory(data: InsertSuccessStory) {
   const db = await getDb();
   if (!db) return;
   await db.insert(successStories).values(data);
+}
+
+export async function getUserReferralCode(userId: number): Promise<string> {
+  const db = await getDb();
+  if (!db) return "";
+  const result = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+  if (result.length > 0 && result[0].referralCode) return result[0].referralCode;
+  // Generate a new code if none exists
+  const code = "WR" + Math.random().toString(36).substring(2, 8).toUpperCase();
+  await db.update(users).set({ referralCode: code }).where(eq(users.id, userId));
+  return code;
+}
+
+export async function getReferralStats(userId: number) {
+  const db = await getDb();
+  if (!db) return { total: 0, rewarded: 0 };
+  const rows = await db.select().from(referrals).where(eq(referrals.referrerId, userId));
+  return { total: rows.length, rewarded: rows.filter(r => r.rewarded === 1).length };
+}
+
+export async function recordReferral(referralCode: string, referredUserId: number) {
+  const db = await getDb();
+  if (!db) return;
+  // Find the referrer
+  const referrers = await db.select().from(users).where(eq(users.referralCode, referralCode)).limit(1);
+  if (!referrers.length) return;
+  const referrerId = referrers[0].id;
+  if (referrerId === referredUserId) return; // can't refer yourself
+  // Check not already recorded
+  const existing = await db.select().from(referrals)
+    .where(and(eq(referrals.referrerId, referrerId), eq(referrals.referredUserId, referredUserId)))
+    .limit(1);
+  if (existing.length) return;
+  await db.insert(referrals).values({ referrerId, referredUserId, referralCode, rewarded: 0 });
 }

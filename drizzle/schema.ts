@@ -12,6 +12,8 @@ export const users = mysqlTable("users", {
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
   // Stripe customer ID for linking payments
   stripeCustomerId: varchar("stripeCustomerId", { length: 64 }),
+  // Referral code unique to each user
+  referralCode: varchar("referralCode", { length: 16 }),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -73,3 +75,18 @@ export const successStories = mysqlTable("success_stories", {
 
 export type SuccessStory = typeof successStories.$inferSelect;
 export type InsertSuccessStory = typeof successStories.$inferInsert;
+
+/**
+ * Referrals table — tracks who referred whom.
+ */
+export const referrals = mysqlTable("referrals", {
+  id: int("id").autoincrement().primaryKey(),
+  referrerId: int("referrerId").notNull(),       // user who shared the link
+  referredUserId: int("referredUserId").notNull(), // user who signed up via link
+  referralCode: varchar("referralCode", { length: 16 }).notNull(),
+  rewarded: int("rewarded").notNull().default(0), // 1 = reward issued
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Referral = typeof referrals.$inferSelect;
+export type InsertReferral = typeof referrals.$inferInsert;

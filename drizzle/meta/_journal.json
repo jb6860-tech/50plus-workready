@@ -15,6 +15,13 @@
       "when": 1775246520614,
       "tag": "0001_sloppy_warbound",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1775247330465,
+      "tag": "0002_foamy_titanium_man",
+      "breakpoints": true
     }
   ]
 }

@@ -16,6 +16,9 @@ import SalaryNegotiation from "./pages/SalaryNegotiation";
 import SuccessStories from "./pages/SuccessStories";
 import BonusScripts from "./pages/BonusScripts";
 import PremiumSuccess from "./pages/PremiumSuccess";
+import AccountDashboard from "./pages/AccountDashboard";
+import LinkedInGuide from "./pages/LinkedInGuide";
+import ReferralProgram from "./pages/ReferralProgram";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
@@ -33,6 +36,9 @@ function Router() {
         <Route path="/success-stories" component={SuccessStories} />
         <Route path="/bonus-scripts" component={BonusScripts} />
         <Route path="/premium-success" component={PremiumSuccess} />
+        <Route path="/account" component={AccountDashboard} />
+        <Route path="/linkedin-guide" component={LinkedInGuide} />
+        <Route path="/referral" component={ReferralProgram} />
         <Route component={Home} />
       </Switch>
       <BottomNav />

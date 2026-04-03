@@ -11,6 +11,7 @@ import CoverLetterBuilder from "./pages/CoverLetterBuilder";
 import ScamChecker from "./pages/ScamChecker";
 import JobResources from "./pages/JobResources";
 import Affirmations from "./pages/Affirmations";
+import JobTracker from "./pages/JobTracker";
 
 function Router() {
   return (
@@ -23,6 +24,7 @@ function Router() {
         <Route path="/scam-checker" component={ScamChecker} />
         <Route path="/job-resources" component={JobResources} />
         <Route path="/affirmations" component={Affirmations} />
+        <Route path="/job-tracker" component={JobTracker} />
         <Route component={Home} />
       </Switch>
       <BottomNav />

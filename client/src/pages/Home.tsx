@@ -1,11 +1,15 @@
 /*
  * DESIGN: "Warm Authority" — Hero with navy/cream gradient, Playfair Display headline,
- * gold accent, Morning Ritual banner, quick-access cards with staggered fade-up animation
+ * gold accent, Morning Ritual banner, Share App button, quick-access cards with staggered fade-up animation
  */
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useLocation } from "wouter";
-import { FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Star, Heart, ClipboardList, Sun, X, ArrowRight, DollarSign } from "lucide-react";
+import {
+  FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Star, Heart,
+  ClipboardList, Sun, X, ArrowRight, DollarSign, Share2, Users
+} from "lucide-react";
 import PageFooter from "@/components/PageFooter";
+import { toast } from "sonner";
 
 const HERO_IMAGE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372772610/7aCQhXVwYTmP85sKfYqKej/hero-banner-DWYyjSeupqiTNoNsnQcrDH.webp";
 
@@ -75,6 +79,7 @@ const sections = [
   { path: "/affirmations", icon: Heart, title: "Daily Affirmations", desc: "Words of strength for your job search journey", color: "#C9922A" },
   { path: "/job-tracker", icon: ClipboardList, title: "Job Application Tracker", desc: "Track every application in one place", color: "#1B3A6B" },
   { path: "/salary-negotiation", icon: DollarSign, title: "Salary Negotiation", desc: "Scripts and strategies to ask for what you deserve", color: "#C9922A" },
+  { path: "/success-stories", icon: Users, title: "Success Stories", desc: "Real inspiration from workers 50+ who made it happen", color: "#2A5298" },
 ];
 
 export default function Home() {
@@ -82,20 +87,29 @@ export default function Home() {
   const [showRitual, setShowRitual] = useState(!hasReadTodayAffirmation());
   const [dailyAffirmation] = useState(getDailyAffirmation);
 
-  const handleRitualDismiss = () => {
-    markAffirmationRead();
-    setShowRitual(false);
-  };
+  const handleRitualDismiss = () => { markAffirmationRead(); setShowRitual(false); };
+  const handleRitualNavigate = () => { markAffirmationRead(); setShowRitual(false); navigate("/affirmations"); };
 
-  const handleRitualNavigate = () => {
-    markAffirmationRead();
-    setShowRitual(false);
-    navigate("/affirmations");
-  };
-
-  // Greeting based on time of day
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+
+  const handleShare = useCallback(async () => {
+    const shareData = {
+      title: "50+ WorkReady — Job Toolkit for Adults 50+",
+      text: "I found this free job preparation app designed specifically for adults 50 and older. It has resume tips, interview scripts, a cover letter builder, scam job checker, and more. Check it out!",
+      url: window.location.origin,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
+        toast.success("App link copied to clipboard! Paste it anywhere to share.");
+      }
+    } catch {
+      // User cancelled share — no error needed
+    }
+  }, []);
 
   return (
     <div className="section-page" style={{ background: "#FDF8F0" }}>
@@ -124,6 +138,15 @@ export default function Home() {
           <p className="text-sm text-blue-100 leading-relaxed max-w-xs" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
             A job preparation toolkit built specifically for adults 50 and older — because your best work may still be ahead of you.
           </p>
+          {/* Share Button in Hero */}
+          <button
+            onClick={handleShare}
+            className="mt-4 flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all duration-200 active:scale-95"
+            style={{ background: "rgba(255,255,255,0.18)", color: "white", border: "1.5px solid rgba(255,255,255,0.35)", fontFamily: "'Source Sans 3', sans-serif", backdropFilter: "blur(4px)" }}
+          >
+            <Share2 size={13} />
+            Share This App
+          </button>
         </div>
       </div>
 
@@ -131,14 +154,9 @@ export default function Home() {
       {showRitual && (
         <div
           className="mx-4 mt-4 rounded-2xl overflow-hidden relative fade-up"
-          style={{
-            background: "linear-gradient(135deg, #C9922A 0%, #E8B84B 100%)",
-            boxShadow: "0 6px 20px rgba(201,146,42,0.3)",
-          }}
+          style={{ background: "linear-gradient(135deg, #C9922A 0%, #E8B84B 100%)", boxShadow: "0 6px 20px rgba(201,146,42,0.3)" }}
         >
-          {/* Decorative circle */}
           <div className="absolute top-0 right-0 w-24 h-24 rounded-full opacity-20" style={{ background: "white", transform: "translate(30%, -30%)" }} />
-
           <div className="px-4 py-4 relative z-10">
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-center gap-2 mb-2">
@@ -146,47 +164,30 @@ export default function Home() {
                   <Sun size={16} className="text-white" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-white/80 uppercase tracking-widest" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
-                    Morning Ritual
-                  </p>
-                  <p className="text-sm font-bold text-white" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
-                    {greeting}! Start your day with intention.
-                  </p>
+                  <p className="text-xs font-semibold text-white/80 uppercase tracking-widest" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>Morning Ritual</p>
+                  <p className="text-sm font-bold text-white" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>{greeting}! Start your day with intention.</p>
                 </div>
               </div>
-              <button onClick={handleRitualDismiss} className="flex-shrink-0 mt-0.5">
-                <X size={16} className="text-white/70" />
-              </button>
+              <button onClick={handleRitualDismiss} className="flex-shrink-0 mt-0.5"><X size={16} className="text-white/70" /></button>
             </div>
-
-            <p
-              className="text-sm text-white/90 leading-relaxed italic mb-3 pl-10"
-              style={{ fontFamily: "'Playfair Display', serif" }}
-            >
+            <p className="text-sm text-white/90 leading-relaxed italic mb-3 pl-10" style={{ fontFamily: "'Playfair Display', serif" }}>
               "{dailyAffirmation}"
             </p>
-
-            <button
-              onClick={handleRitualNavigate}
-              className="flex items-center gap-1.5 text-xs font-bold text-white pl-10 transition-opacity hover:opacity-80"
-              style={{ fontFamily: "'Source Sans 3', sans-serif" }}
-            >
+            <button onClick={handleRitualNavigate} className="flex items-center gap-1.5 text-xs font-bold text-white pl-10 transition-opacity hover:opacity-80" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
               Read today's full affirmation <ArrowRight size={13} />
             </button>
           </div>
         </div>
       )}
 
-      {/* Welcome Banner (shown only after ritual is dismissed or already read) */}
+      {/* Welcome Banner */}
       {!showRitual && (
         <div className="mx-4 mt-4 rounded-xl px-4 py-3 flex items-start gap-3" style={{ background: "#EFF4FF", border: "1px solid #C5D5F0" }}>
           <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: "#1B3A6B" }}>
             <Star size={14} fill="#C9922A" className="text-[#C9922A]" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-[#1B3A6B]" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
-              Welcome! You belong here.
-            </p>
+            <p className="text-sm font-semibold text-[#1B3A6B]" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>Welcome! You belong here.</p>
             <p className="text-xs text-[#4A6090] mt-0.5 leading-relaxed" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
               Decades of experience make you a stronger candidate. Use these tools to present yourself with confidence.
             </p>
@@ -214,12 +215,8 @@ export default function Home() {
                     <Icon size={18} className="text-white" />
                   </div>
                   <div className="min-w-0">
-                    <p className="font-bold text-[#1B3A6B] text-sm" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
-                      {section.title}
-                    </p>
-                    <p className="text-xs text-[#6B7280] mt-0.5 leading-tight" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
-                      {section.desc}
-                    </p>
+                    <p className="font-bold text-[#1B3A6B] text-sm" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>{section.title}</p>
+                    <p className="text-xs text-[#6B7280] mt-0.5 leading-tight" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>{section.desc}</p>
                   </div>
                   <div className="ml-auto flex-shrink-0">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -231,6 +228,19 @@ export default function Home() {
             );
           })}
         </div>
+
+        {/* Share CTA at bottom */}
+        <button
+          onClick={handleShare}
+          className="w-full mt-5 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 active:scale-95"
+          style={{ background: "linear-gradient(135deg, #2A5298 0%, #1B3A6B 100%)", color: "white", fontFamily: "'Source Sans 3', sans-serif", boxShadow: "0 4px 14px rgba(27,58,107,0.25)" }}
+        >
+          <Share2 size={16} />
+          Share 50+ WorkReady with Someone You Know
+        </button>
+        <p className="text-center text-xs text-[#9CA3AF] mt-2 mb-2" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
+          Help another adult 50+ find the tools they deserve.
+        </p>
       </div>
 
       <PageFooter />

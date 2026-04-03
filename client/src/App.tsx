@@ -13,6 +13,7 @@ import JobResources from "./pages/JobResources";
 import Affirmations from "./pages/Affirmations";
 import JobTracker from "./pages/JobTracker";
 import SalaryNegotiation from "./pages/SalaryNegotiation";
+import SuccessStories from "./pages/SuccessStories";
 
 function Router() {
   return (
@@ -27,6 +28,7 @@ function Router() {
         <Route path="/affirmations" component={Affirmations} />
         <Route path="/job-tracker" component={JobTracker} />
         <Route path="/salary-negotiation" component={SalaryNegotiation} />
+        <Route path="/success-stories" component={SuccessStories} />
         <Route component={Home} />
       </Switch>
       <BottomNav />

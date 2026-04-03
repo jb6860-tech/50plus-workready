@@ -12,6 +12,7 @@ import ScamChecker from "./pages/ScamChecker";
 import JobResources from "./pages/JobResources";
 import Affirmations from "./pages/Affirmations";
 import JobTracker from "./pages/JobTracker";
+import SalaryNegotiation from "./pages/SalaryNegotiation";
 
 function Router() {
   return (
@@ -25,6 +26,7 @@ function Router() {
         <Route path="/job-resources" component={JobResources} />
         <Route path="/affirmations" component={Affirmations} />
         <Route path="/job-tracker" component={JobTracker} />
+        <Route path="/salary-negotiation" component={SalaryNegotiation} />
         <Route component={Home} />
       </Switch>
       <BottomNav />

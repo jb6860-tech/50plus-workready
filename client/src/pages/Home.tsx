@@ -4,7 +4,7 @@
  */
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
-import { FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Star, Heart, ClipboardList, Sun, X, ArrowRight } from "lucide-react";
+import { FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Star, Heart, ClipboardList, Sun, X, ArrowRight, DollarSign } from "lucide-react";
 import PageFooter from "@/components/PageFooter";
 
 const HERO_IMAGE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372772610/7aCQhXVwYTmP85sKfYqKej/hero-banner-DWYyjSeupqiTNoNsnQcrDH.webp";
@@ -74,6 +74,7 @@ const sections = [
   { path: "/job-resources", icon: Briefcase, title: "Age-Friendly Job Resources", desc: "Curated job boards for workers 50+", color: "#2A5298" },
   { path: "/affirmations", icon: Heart, title: "Daily Affirmations", desc: "Words of strength for your job search journey", color: "#C9922A" },
   { path: "/job-tracker", icon: ClipboardList, title: "Job Application Tracker", desc: "Track every application in one place", color: "#1B3A6B" },
+  { path: "/salary-negotiation", icon: DollarSign, title: "Salary Negotiation", desc: "Scripts and strategies to ask for what you deserve", color: "#C9922A" },
 ];
 
 export default function Home() {

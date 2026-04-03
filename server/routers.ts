@@ -10,7 +10,9 @@ import {
   createPurchase, getUserByStripeCustomerId, updateUserStripeCustomerId,
   getApprovedStories, createSuccessStory, getActiveSubscription, getLifetimePurchase,
   getUserReferralCode, getReferralStats, getAdminStats, approveStory, rejectStory, getAllStoriesAdmin,
+  saveResumeDraft, loadResumeDraft,
 } from "./db";
+import { invokeLLM } from "./_core/llm";
 import { TRPCError } from "@trpc/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", { apiVersion: "2025-01-27.acacia" });
@@ -218,6 +220,81 @@ export const appRouter = router({
         if (ctx.user.role !== 'admin') throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access required' });
         await rejectStory(input.storyId);
         return { success: true };
+      }),
+  }),
+  resume: router({
+    save: protectedProcedure
+      .input(z.object({ data: z.string(), template: z.string().default("classic") }))
+      .mutation(async ({ ctx, input }) => {
+        await saveResumeDraft(ctx.user.id, input.data, input.template);
+        return { success: true };
+      }),
+    load: protectedProcedure.query(async ({ ctx }) => {
+      return await loadResumeDraft(ctx.user.id);
+    }),
+    analyze: protectedProcedure
+      .input(z.object({ resumeText: z.string().min(50).max(8000) }))
+      .mutation(async ({ input }) => {
+        const response = await invokeLLM({
+          messages: [
+            {
+              role: "system",
+              content: `You are an expert career coach specializing in helping adults aged 50+ navigate the modern job market. 
+You analyze resumes and provide specific, actionable, encouraging feedback. 
+Your feedback focuses on: reducing age bias signals, strengthening impact statements, improving ATS keyword optimization, 
+and highlighting transferable skills. Always be warm, respectful, and empowering in your tone.
+Return your response as JSON matching this exact schema:
+{
+  "overallScore": number (0-100),
+  "summary": string (2-3 sentences of overall assessment),
+  "strengths": string[] (3-4 specific strengths found in the resume),
+  "improvements": [{"title": string, "detail": string, "priority": "high"|"medium"|"low"}] (4-6 items),
+  "ageBiasFlags": string[] (specific phrases or elements that may signal age, with suggestions to fix),
+  "atsKeywords": string[] (5-8 keywords to add or strengthen for ATS optimization),
+  "quickWins": string[] (3 immediate changes that would have the biggest impact)
+}`,
+            },
+            {
+              role: "user",
+              content: `Please analyze this resume and provide detailed feedback:\n\n${input.resumeText}`,
+            },
+          ],
+          response_format: {
+            type: "json_schema",
+            json_schema: {
+              name: "resume_feedback",
+              strict: true,
+              schema: {
+                type: "object",
+                properties: {
+                  overallScore: { type: "number" },
+                  summary: { type: "string" },
+                  strengths: { type: "array", items: { type: "string" } },
+                  improvements: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        title: { type: "string" },
+                        detail: { type: "string" },
+                        priority: { type: "string" },
+                      },
+                      required: ["title", "detail", "priority"],
+                      additionalProperties: false,
+                    },
+                  },
+                  ageBiasFlags: { type: "array", items: { type: "string" } },
+                  atsKeywords: { type: "array", items: { type: "string" } },
+                  quickWins: { type: "array", items: { type: "string" } },
+                },
+                required: ["overallScore", "summary", "strengths", "improvements", "ageBiasFlags", "atsKeywords", "quickWins"],
+                additionalProperties: false,
+              },
+            },
+          },
+        });
+        const content = (response.choices[0]?.message?.content as string) || "{}";
+        return JSON.parse(content);
       }),
   }),
   stories: router({

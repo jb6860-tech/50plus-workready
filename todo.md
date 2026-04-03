@@ -2,3 +2,6 @@
 - [x] Resume Builder: live formatted preview panel
 - [x] Resume Builder: PDF download via client-side jsPDF generation
 - [x] Resume Builder: route, nav tab, and Home Dashboard card
+- [ ] Resume Builder: Save & Resume Later (DB persistence, auto-save, load on return)
+- [ ] Resume Builder: Multiple templates (Classic, Modern, Compact)
+- [ ] Resume Builder: AI-powered resume analysis and feedback

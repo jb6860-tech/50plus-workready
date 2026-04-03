@@ -90,3 +90,18 @@ export const referrals = mysqlTable("referrals", {
 
 export type Referral = typeof referrals.$inferSelect;
 export type InsertReferral = typeof referrals.$inferInsert;
+
+/**
+ * Resume drafts — stores saved resume data per user for Save & Resume Later.
+ */
+export const resumeDrafts = mysqlTable("resume_drafts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(), // one draft per user
+  data: text("data").notNull(),             // JSON-serialized ResumeData
+  template: varchar("template", { length: 32 }).notNull().default("classic"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ResumeDraft = typeof resumeDrafts.$inferSelect;
+export type InsertResumeDraft = typeof resumeDrafts.$inferInsert;

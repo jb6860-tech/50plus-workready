@@ -215,3 +215,22 @@ export async function recordReferral(referralCode: string, referredUserId: numbe
   if (existing.length) return;
   await db.insert(referrals).values({ referrerId, referredUserId, referralCode, rewarded: 0 });
 }
+
+// ── Resume Draft helpers ──────────────────────────────────────────────────────
+
+export async function saveResumeDraft(userId: number, data: string, template: string): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  const { resumeDrafts } = await import("../drizzle/schema");
+  await db.insert(resumeDrafts)
+    .values({ userId, data, template })
+    .onDuplicateKeyUpdate({ set: { data, template } });
+}
+
+export async function loadResumeDraft(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const { resumeDrafts } = await import("../drizzle/schema");
+  const rows = await db.select().from(resumeDrafts).where(eq(resumeDrafts.userId, userId)).limit(1);
+  return rows[0] ?? null;
+}

@@ -1,0 +1,4 @@
+- [x] Resume Builder: multi-step form (contact, summary, experience, education, skills)
+- [x] Resume Builder: live formatted preview panel
+- [x] Resume Builder: PDF download via client-side jsPDF generation
+- [x] Resume Builder: route, nav tab, and Home Dashboard card

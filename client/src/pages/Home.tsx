@@ -6,7 +6,7 @@ import { useState, useCallback } from "react";
 import { useLocation } from "wouter";
 import {
   FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Star, Heart,
-  ClipboardList, Sun, X, ArrowRight, DollarSign, Share2, Users, Crown, Linkedin, Gift, User, Network, Shield
+  ClipboardList, Sun, X, ArrowRight, DollarSign, Share2, Users, Crown, Linkedin, Gift, User, Network, Shield, FilePen
 } from "lucide-react";
 import PageFooter from "@/components/PageFooter";
 import { toast } from "sonner";
@@ -86,6 +86,7 @@ const sections = [
   { path: "/account", icon: User, title: "My Account", desc: "Manage your subscription, referrals, and premium access", color: "#2A5298" },
   { path: "/networking", icon: Network, title: "Networking Hub", desc: "LinkedIn tips and local events to grow your connections", color: "#0077B5" },
   { path: "/admin", icon: Shield, title: "Admin Dashboard", desc: "Business overview, user stats, and content moderation", color: "#1B3A6B" },
+  { path: "/resume-builder", icon: FilePen, title: "Resume Builder", desc: "Build and download a professional, age-bias-free resume as a PDF", color: "#C9922A" },
 ];
 
 export default function Home() {

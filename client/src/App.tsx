@@ -14,8 +14,10 @@ import Affirmations from "./pages/Affirmations";
 import JobTracker from "./pages/JobTracker";
 import SalaryNegotiation from "./pages/SalaryNegotiation";
 import SuccessStories from "./pages/SuccessStories";
-
+import BonusScripts from "./pages/BonusScripts";
+import PremiumSuccess from "./pages/PremiumSuccess";
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <>
       <Switch>
@@ -29,6 +31,8 @@ function Router() {
         <Route path="/job-tracker" component={JobTracker} />
         <Route path="/salary-negotiation" component={SalaryNegotiation} />
         <Route path="/success-stories" component={SuccessStories} />
+        <Route path="/bonus-scripts" component={BonusScripts} />
+        <Route path="/premium-success" component={PremiumSuccess} />
         <Route component={Home} />
       </Switch>
       <BottomNav />

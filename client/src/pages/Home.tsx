@@ -6,7 +6,7 @@ import { useState, useCallback } from "react";
 import { useLocation } from "wouter";
 import {
   FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Star, Heart,
-  ClipboardList, Sun, X, ArrowRight, DollarSign, Share2, Users
+  ClipboardList, Sun, X, ArrowRight, DollarSign, Share2, Users, Crown
 } from "lucide-react";
 import PageFooter from "@/components/PageFooter";
 import { toast } from "sonner";
@@ -80,6 +80,7 @@ const sections = [
   { path: "/job-tracker", icon: ClipboardList, title: "Job Application Tracker", desc: "Track every application in one place", color: "#1B3A6B" },
   { path: "/salary-negotiation", icon: DollarSign, title: "Salary Negotiation", desc: "Scripts and strategies to ask for what you deserve", color: "#C9922A" },
   { path: "/success-stories", icon: Users, title: "Success Stories", desc: "Real inspiration from workers 50+ who made it happen", color: "#2A5298" },
+  { path: "/bonus-scripts", icon: Crown, title: "Premium: Bonus Scripts", desc: "10 advanced interview scripts for the toughest questions", color: "#C9922A" },
 ];
 
 export default function Home() {

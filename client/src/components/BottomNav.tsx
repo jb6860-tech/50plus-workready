@@ -3,7 +3,7 @@
  * Bottom nav is the primary navigation for mobile-first PWA — 7 items
  */
 import { useLocation } from "wouter";
-import { Home, FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Heart, ClipboardList, DollarSign, Users } from "lucide-react";
+import { Home, FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Heart, ClipboardList, DollarSign, Users, Crown } from "lucide-react";
 
 const navItems = [
   { path: "/", icon: Home, label: "Home" },
@@ -16,6 +16,7 @@ const navItems = [
   { path: "/job-tracker", icon: ClipboardList, label: "Tracker" },
   { path: "/salary-negotiation", icon: DollarSign, label: "Salary" },
   { path: "/success-stories", icon: Users, label: "Stories" },
+  { path: "/bonus-scripts", icon: Crown, label: "Premium" },
 ];
 
 export default function BottomNav() {

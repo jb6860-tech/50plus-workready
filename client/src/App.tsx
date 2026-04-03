@@ -19,6 +19,8 @@ import PremiumSuccess from "./pages/PremiumSuccess";
 import AccountDashboard from "./pages/AccountDashboard";
 import LinkedInGuide from "./pages/LinkedInGuide";
 import ReferralProgram from "./pages/ReferralProgram";
+import AdminDashboard from "./pages/AdminDashboard";
+import NetworkingDashboard from "./pages/NetworkingDashboard";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
@@ -39,6 +41,8 @@ function Router() {
         <Route path="/account" component={AccountDashboard} />
         <Route path="/linkedin-guide" component={LinkedInGuide} />
         <Route path="/referral" component={ReferralProgram} />
+        <Route path="/admin" component={AdminDashboard} />
+        <Route path="/networking" component={NetworkingDashboard} />
         <Route component={Home} />
       </Switch>
       <BottomNav />

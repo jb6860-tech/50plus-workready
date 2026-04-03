@@ -6,7 +6,7 @@ import { useState, useCallback } from "react";
 import { useLocation } from "wouter";
 import {
   FileText, MessageSquare, Mail, ShieldAlert, Briefcase, Star, Heart,
-  ClipboardList, Sun, X, ArrowRight, DollarSign, Share2, Users, Crown, Linkedin, Gift, User
+  ClipboardList, Sun, X, ArrowRight, DollarSign, Share2, Users, Crown, Linkedin, Gift, User, Network, Shield
 } from "lucide-react";
 import PageFooter from "@/components/PageFooter";
 import { toast } from "sonner";
@@ -84,6 +84,8 @@ const sections = [
   { path: "/linkedin-guide", icon: Linkedin, title: "LinkedIn Profile Guide", desc: "Optimize your profile to attract age-friendly employers", color: "#0077B5" },
   { path: "/referral", icon: Gift, title: "Referral Program", desc: "Share the app and earn rewards for growing our community", color: "#1B3A6B" },
   { path: "/account", icon: User, title: "My Account", desc: "Manage your subscription, referrals, and premium access", color: "#2A5298" },
+  { path: "/networking", icon: Network, title: "Networking Hub", desc: "LinkedIn tips and local events to grow your connections", color: "#0077B5" },
+  { path: "/admin", icon: Shield, title: "Admin Dashboard", desc: "Business overview, user stats, and content moderation", color: "#1B3A6B" },
 ];
 
 export default function Home() {

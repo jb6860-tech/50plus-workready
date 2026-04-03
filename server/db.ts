@@ -152,6 +152,54 @@ export async function getReferralStats(userId: number) {
   return { total: rows.length, rewarded: rows.filter(r => r.rewarded === 1).length };
 }
 
+export async function getAdminStats() {
+  const db = await getDb();
+  if (!db) return null;
+  const [allUsers, allSubs, allPurchases, allStories, allReferrals] = await Promise.all([
+    db.select().from(users).orderBy(desc(users.createdAt)),
+    db.select().from(subscriptions).orderBy(desc(subscriptions.createdAt)),
+    db.select().from(purchases).orderBy(desc(purchases.createdAt)),
+    db.select().from(successStories).orderBy(desc(successStories.createdAt)),
+    db.select().from(referrals).orderBy(desc(referrals.createdAt)),
+  ]);
+  const activeSubscribers = allSubs.filter(s => s.status === 'active').length;
+  const lifetimeMembers = allPurchases.length;
+  const pendingStories = allStories.filter(s => s.approved === 'pending').length;
+  const approvedStories = allStories.filter(s => s.approved === 'approved').length;
+  const totalRevenue = (activeSubscribers * 7.99) + (lifetimeMembers * 29.99);
+  return {
+    totalUsers: allUsers.length,
+    activeSubscribers,
+    lifetimeMembers,
+    totalPremium: activeSubscribers + lifetimeMembers,
+    pendingStories,
+    approvedStories,
+    totalReferrals: allReferrals.length,
+    estimatedRevenue: totalRevenue,
+    recentUsers: allUsers.slice(0, 10).map(u => ({ id: u.id, name: u.name, email: u.email, role: u.role, createdAt: u.createdAt, lastSignedIn: u.lastSignedIn })),
+    recentSubscriptions: allSubs.slice(0, 10).map(s => ({ id: s.id, userId: s.userId, status: s.status, createdAt: s.createdAt })),
+    pendingStoriesList: allStories.filter(s => s.approved === 'pending').slice(0, 20),
+  };
+}
+
+export async function approveStory(storyId: number) {
+  const db = await getDb();
+  if (!db) return;
+  await db.update(successStories).set({ approved: 'approved' }).where(eq(successStories.id, storyId));
+}
+
+export async function rejectStory(storyId: number) {
+  const db = await getDb();
+  if (!db) return;
+  await db.update(successStories).set({ approved: 'rejected' }).where(eq(successStories.id, storyId));
+}
+
+export async function getAllStoriesAdmin() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(successStories).orderBy(desc(successStories.createdAt)).limit(100);
+}
+
 export async function recordReferral(referralCode: string, referredUserId: number) {
   const db = await getDb();
   if (!db) return;

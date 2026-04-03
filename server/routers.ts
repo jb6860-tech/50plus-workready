@@ -9,8 +9,9 @@ import {
   hasPremiumAccess, upsertSubscription, updateSubscriptionStatus,
   createPurchase, getUserByStripeCustomerId, updateUserStripeCustomerId,
   getApprovedStories, createSuccessStory, getActiveSubscription, getLifetimePurchase,
-  getUserReferralCode, getReferralStats,
+  getUserReferralCode, getReferralStats, getAdminStats, approveStory, rejectStory, getAllStoriesAdmin,
 } from "./db";
+import { TRPCError } from "@trpc/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", { apiVersion: "2025-01-27.acacia" });
 
@@ -193,6 +194,30 @@ export const appRouter = router({
           return_url: input.origin + "/account",
         });
         return { url: session.url };
+      }),
+  }),
+  admin: router({
+    stats: protectedProcedure.query(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access required' });
+      return await getAdminStats();
+    }),
+    allStories: protectedProcedure.query(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access required' });
+      return await getAllStoriesAdmin();
+    }),
+    approveStory: protectedProcedure
+      .input(z.object({ storyId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== 'admin') throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access required' });
+        await approveStory(input.storyId);
+        return { success: true };
+      }),
+    rejectStory: protectedProcedure
+      .input(z.object({ storyId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== 'admin') throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access required' });
+        await rejectStory(input.storyId);
+        return { success: true };
       }),
   }),
   stories: router({

@@ -8,3 +8,4 @@
 - [ ] AI Job Match: paste job description, get match score and keyword suggestions
 - [ ] Cover Letter Builder: AI-powered generation via tRPC LLM
 - [ ] AI Interview Coach: paste job description, get custom questions with age-positive answer frameworks
+- [ ] Pricing page: Free/Monthly/Lifetime plan cards with feature comparison and Stripe checkout

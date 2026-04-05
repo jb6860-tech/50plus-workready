@@ -12,3 +12,4 @@
 - [x] Privacy Policy page inside the app with route and navigation link
 - [x] App store presentation script document
 - [x] Redesign bottom navigation: 5 primary tabs + More drawer for all secondary features
+- [x] Replace hero banner image with African American woman aged 50+

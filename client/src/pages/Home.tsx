@@ -11,7 +11,7 @@ import {
 import PageFooter from "@/components/PageFooter";
 import { toast } from "sonner";
 
-const HERO_IMAGE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372772610/7aCQhXVwYTmP85sKfYqKej/hero-banner-DWYyjSeupqiTNoNsnQcrDH.webp";
+const HERO_IMAGE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372772610/7aCQhXVwYTmP85sKfYqKej/hero-african-american-woman-BLNcvFxnBWQKPYnJfyEEaF.webp";
 
 const BUILT_IN_AFFIRMATIONS = [
   "My decades of experience are a powerful advantage — not a liability.",

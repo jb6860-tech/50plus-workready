@@ -11,3 +11,4 @@
 - [x] Pricing page: Free/Monthly/Lifetime plan cards with feature comparison and Stripe checkout
 - [x] Privacy Policy page inside the app with route and navigation link
 - [x] App store presentation script document
+- [x] Redesign bottom navigation: 5 primary tabs + More drawer for all secondary features

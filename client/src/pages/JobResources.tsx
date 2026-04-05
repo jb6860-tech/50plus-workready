@@ -71,9 +71,9 @@ const organizations = [
     badge: "Support",
   },
   {
-    name: "Senior Job Bank",
-    desc: "Free job listings and career resources for older adults seeking part-time or full-time work.",
-    url: "https://www.seniorjobbank.org",
+    name: "Workforce50",
+    desc: "Free job listings and career resources specifically for workers aged 50 and older seeking part-time or full-time work.",
+    url: "https://www.workforce50.com",
     badge: "Free Resource",
   },
 ];
